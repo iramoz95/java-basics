@@ -377,3 +377,7 @@ class Shapes4 {
 ```
 
 Here **Triangle() calls super()** with the parameters **w and h**. This causes the **TwoDShape()** constructor to be **called** which **initiliizes width and height** using these values.
+
+**The key point is that once you have created a superclass that defines the general aspects
+of an object, that superclass can be inherited to form specialized classes. Each subclass
+simply adds its own, unique attributes. This is the essence of inheritance.**
