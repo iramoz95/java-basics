@@ -381,3 +381,133 @@ Here **Triangle() calls super()** with the parameters **w and h**. This causes t
 **The key point is that once you have created a superclass that defines the general aspects
 of an object, that superclass can be inherited to form specialized classes. Each subclass
 simply adds its own, unique attributes. This is the essence of inheritance.**
+
+## Creating a Multilevel Hierarchy
+
+You can build hierarchies that contain as **many layers of inheritance**
+as you like. **It is perfectly acceptable to use a subclass as a superclass of another**.
+
+Because of inheritance, ColorTriangle can make use of the previously defined classes of Triangle and TwoDShape, adding only the extra information it needs for its own, specific application. **This is part of the value of inheritance; it allows the reuse of code**.
+
+**super( ) always refers to the constructor in the closest superclass;**
+
+```Java
+// A multilevel hierarchy
+class TwoDShape {
+    private double width;
+    private double height;
+
+    // A default constructor
+    TwoDShape() {
+        width = height = 0.0;
+    }
+
+    // Parameterized constructor
+    TwoDShape(double w, double h) {
+        width = w;
+        height = h;
+    }
+
+    // Constructor object with equl width and height
+    TwoDShape(double x) {
+        width = height = x;
+    }
+
+    // Accessor methods for width and height
+    double getWidth() {
+        return width;
+    }
+
+    double getHeight() {
+        return height;
+    }
+
+    void setWidth(double w) {
+        width = w;
+    }
+
+    void setHeight(double h) {
+        height = h;
+    }
+
+    void showDim() {
+        System.out.println("Width and height are " + width + " and " + height);
+    }
+}
+
+// Extends TwoDShape
+class Triangle extends TwoDShape {
+    private String style;
+
+    // A default constructor
+    Triangle() {
+        super();
+        style = "none";
+    }
+
+    // Constructor
+    Triangle(String s, double w, double h) {
+        super(w, h);// Call superclass constructor
+        style = "filled";
+    }
+
+    // One argument constructor
+    Triangle(double x) {
+        super(x);// call superclass constructor
+        style = "filled";
+    }
+
+    double area() {
+        return getWidth() * getHeight() / 2;
+    }
+
+    void showStyle() {
+        System.out.println("Triangle is " + style);
+    }
+}
+
+/*
+ * Extend Triangle
+ * ColorTriangle inherits Triangle, which
+ * is descended from TwoDShape, so
+ * ColorTriangle includes all members
+ * of Triangle and TwoDShape.
+ */
+class ColorTriangle extends Triangle {
+    private String color;
+
+    ColorTriangle(String c, String s, double w, double h) {
+        super(s, w, h);
+        color = c;
+    }
+
+    String getColor() {
+        return color;
+    }
+
+    void showColor() {
+        System.out.println("Color is " + color);
+    }
+}
+
+class Shapes6 {
+    public static void main(String[] args) {
+        ColorTriangle t1 = new ColorTriangle("Blue", "outlined", 8.0, 12.0);
+        ColorTriangle t2 = new ColorTriangle("Red", "filled", 2.0, 2.0);
+
+        System.out.println("Info fot t1: ");
+        t1.showStyle();
+        t1.showDim();
+        t1.showColor();
+        System.out.println("Area is " + t1.area());
+        System.out.println();
+
+        System.out.println("Info fot t2: ");
+        t2.showStyle();
+        t2.showDim();
+        t2.showColor();
+        System.out.println("Area is " + t2.area());
+        System.out.println();
+    }
+}
+```
