@@ -512,7 +512,7 @@ class Shapes6 {
 }
 ```
 
-## When Are CONstructors Executed?
+## When Are Constructors Executed?
 
 In a class hierarchy, constructors complete their execution in order of derivation, **from superclass to subclass**. If super( ) is not used, then the default (parameterless) constructor of each superclass will be executed.
 
@@ -580,7 +580,7 @@ class IncompatibleRef {
         X x2;
         Y y = new Y(5);
         x2 = x; // OK, both the same type
-        x2 = y; // Error, not the same type. Cannot convert from Y yo X
+        x2 = y; // Error, not the same type. Cannot convert from Y to X
     }
 }
 
@@ -635,8 +635,6 @@ Here, Y is now derived from X;thus, it is permissible for x2 to be assigned a re
 An important place where subclass references are assigned to superclass variables is when **constructors are called in a class hierarchy**
 
 ```Java
-import javax.swing.plaf.basic.BasicTreeUI.TreeIncrementAction;
-
 class TwoDShape {
     private double width;
     private double height;
@@ -756,3 +754,95 @@ Width and height are 8.0 and 12.0\
 Area is 48.0
 
 The key point is that TwoDshape( ) is expecting a TwoDShape object. However, Triangle( ) passes it a Triangle object. The reason this works is because, as explained, a superclass reference can refer to a subclass object. Thus, it is perfectly acceptable to pass TwoDShape( ) a reference to an object of a class derived from TwoDShape. Because the TwoDShape( ) constructor is initializing only those portions of the subclass object that are members of TwoDShape, it doesn’t matter that the object might also contain other members added by derived classes.
+
+## Method Overriding
+
+In a class hierarchy, when a **method in a subclass has the same return type and signature as a method in its superclass**, then the **method in the subclass is said to override the method in the superclass**. When an overridden method is called from within a subclass, it will always refer to the version of that method defined by the subclass.
+
+```Java
+//Method overriding
+class A {
+    int i, j;
+
+    A(int a, int b) {
+        i = a;
+        j = b;
+    }
+
+    // display i and j
+    void show() {
+        System.out.println("i and j: " + i + " " + j);
+    }
+}
+
+class B extends A {
+    int k;
+
+    B(int a, int b, int c) {
+        super(a, b);
+        k = c;
+    }
+
+    // display k - this overrides show() in A
+    void show() {
+        super.show(); // this calss A's show()
+        System.out.println("k: " + k);
+    }
+}
+
+class Override {
+    public static void main(String[] args) {
+        B subOb = new B(1, 2, 3);
+        subOb.show(); // this calls show() in B
+    }
+}
+```
+
+## Method Overloading
+
+Method **overriding** occurs only when the **signatures of the two methods are identical**. **If they are not**, then the two methods are simply **overloaded**
+
+```Java
+/*
+ * Methods with differing signatures
+ * are overloaded and not overridden
+ */
+class A {
+    int i, j;
+
+    A(int a, int b) {
+        i = a;
+        j = b;
+    }
+
+    // display i and j
+    void show() {
+        System.out.println("i and j: " + i + " " + j);
+    }
+}
+
+// Create a subclass by extending class A
+class B extends A {
+    int k;
+
+    B(int a, int b, int c) {
+        super(a, b);
+        k = c;
+    }
+
+    // overload show()
+    void show(String msg) {
+        System.out.println(msg + k);
+    }
+}
+
+class Overload {
+    public static void main(String[] args) {
+        B subOb = new B(1, 2, 3);
+        subOb.show("This is k: "); // this calss show() in B
+        subOb.show();// This calls show() in A
+    }
+}
+```
+
+The version of show( ) in B takes a string parameter. This makes its signature different from the one in A, which takes no parameters. Therefore, no overriding (or name hiding) takes place.
