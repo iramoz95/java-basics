@@ -906,3 +906,187 @@ who() in Sub1\
 who() in Sub2
 
 **The version of who( ) executed is determined by the type of object being referred to at the time of the call, not by the class type of supRef.**
+
+## Why Overridden Methods?
+
+**Overridden methods allow Java to support run-time polymorphism**.
+Polymorphism is essential to object-oriented programming for one reason: **it allows a general class to specify methods that will be common to all of its derivatives**, while allowing subclasses to define the specific implementation of some or all of those methods.
+
+Part of the key to successfully applying polymorphism is understanding that the **superclasses and subclasses form a hierarchy that moves from lesser to greater specialization**.
+
+```Java
+// Use dynamic method dispatch
+class TwoDShape {
+    private double width;
+    private double height;
+    private String name;
+
+    // A default constructor
+    TwoDShape() {
+        width = height = 0.0;
+        name = "none";
+    }
+
+    // Parameterized constructor
+    TwoDShape(double w, double h, String n) {
+        width = w;
+        height = h;
+        name = n;
+    }
+
+    // Construct object with equal width and heigth
+    TwoDShape(double x, String n) {
+        width = height = x;
+        name = n;
+    }
+
+    // Construct an object from an object
+    TwoDShape(TwoDShape ob) {
+        width = ob.width;
+        height = ob.height;
+        name = ob.name;
+    }
+
+    // Accessor methods for width and height
+    double getWidth() {
+        return width;
+    }
+
+    double getHeight() {
+        return height;
+    }
+
+    void setWidth(double w) {
+        width = w;
+    }
+
+    void setHeight(double h) {
+        height = h;
+    }
+
+    String getName() {
+        return name;
+    }
+
+    void showDim() {
+        System.out.println("Width and height are " + width + " and " + height);
+    }
+
+    // The area method defined by TwoDShape
+    double area() {
+        System.out.println("area() must be overriden");
+        return 0.0;
+    }
+}
+
+// A subclass of TwoDShape for triangles
+class Triangle extends TwoDShape {
+    private String style;
+
+    // A default contructor
+    Triangle() {
+        super();
+        style = "none";
+    }
+
+    // Constructor for Triangle
+    Triangle(String s, double w, double h) {
+        super(w, h, "triangle");// Call superclass constructor
+        style = s;
+    }
+
+    // One argument constructor
+    Triangle(double x) {
+        super(x, "triangle");// call superclass constructor
+        style = "filled";
+    }
+
+    // COnstruct an object from an object
+    Triangle(Triangle ob) {
+        super(ob); // Pass object to TwoDShape constructor
+        style = ob.style;
+    }
+
+    // Override area() for Triangle
+    double area() {
+        return getWidth() * getHeight() / 2;
+    }
+
+    void showStyle() {
+        System.out.println("Triangle is " + style);
+    }
+}
+
+// A subclass of TwoDShape for rectangles.
+class Rectangle extends TwoDShape {
+    // A default constructor
+    Rectangle() {
+        super();
+    }
+
+    // Constructor for rectangle
+    Rectangle(double w, double h) {
+        super(w, h, "rectangle");// call superclass constructor
+    }
+
+    // Construct a square
+    Rectangle(double x) {
+        super(x, "rectangle");// call superclass constructor
+    }
+
+    // Construct an object from an object
+    Rectangle(Rectangle ob) {
+        super(ob); // pass object TwoDShape constructor
+    }
+
+    boolean isSquare() {
+        if (getWidth() == getHeight())
+            return true;
+        return false;
+    }
+
+    // Override area() for Rectangle
+    double area() {
+        return getWidth() * getHeight();
+    }
+}
+
+class DynShapes {
+    public static void main(String[] args) {
+        TwoDShape[] shapes = new TwoDShape[5];
+
+        shapes[0] = new Triangle("outlined", 8.0, 12.0);
+        shapes[1] = new Rectangle(10);
+        shapes[2] = new Rectangle(10, 4);
+        shapes[3] = new Triangle(7.0);
+        shapes[4] = new TwoDShape(10, 20, "generic");
+
+        for (int i = 0; i < shapes.length; i++) {
+            // The proper version of area() is called for each shape
+            System.out.println("object is " + shapes[i].getName());
+            System.out.println("Area is " + shapes[i].area());
+            System.out.println();
+        }
+    }
+}
+```
+
+Output:\
+object is triangle\
+Area is 48.0
+
+object is rectangle\
+Area is 100.0
+
+object is rectangle\
+Area is 40.0
+
+object is triangle\
+Area is 24.5
+
+object is generic\
+area() must be overriden\
+Area is 0.0
+
+**Each override of area( ) supplies an implementation that is suitable
+for the type of object encapsulated by the subclass.The type of object referred to by a superclass reference variable is determined at run time and acted on accordingly. The interface to this operation is the same no matter what type of shape is being used**
