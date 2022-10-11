@@ -551,3 +551,208 @@ Output:\
 Constructing A.\
 Constructing B.\
 Constructing C.
+
+## Superclass References and Subclass Objects
+
+**Java is a strongly typed language**. Aside from the standard conversions and automatic promotions that apply to its primitive types, **type compatibility is strictly enforced**. Therefore, **a reference variable for one class type cannot normally refer to an object of another class type**.
+
+```Java
+//This will not compile
+class X {
+    int a;
+
+    X(int i) {
+        a = i;
+    }
+}
+
+class Y {
+    int a;
+
+    Y(int i) {
+        a = i;
+    }
+}
+
+class IncompatibleRef {
+    public static void main(String[] args) {
+        X x = new X(10);
+        X x2;
+        Y y = new Y(5);
+        x2 = x; // OK, both the same type
+        x2 = y; // Error, not the same type. Cannot convert from Y yo X
+    }
+}
+
+```
+
+Even though class X and class Y are structurally the same, **it is not possible to assign an X reference to a Y object** because they have **different types**. In general, **an object reference variable can refer only to objects of its type**.
+
+**A superclass reference can refer to a subclass object**.
+
+```Java
+// A superclass reference can refer to a subclass object
+class X {
+    int a;
+
+    X(int i) {
+        a = i;
+    }
+}
+
+class Y extends X {
+    int b;
+
+    Y(int i, int j) {
+        super(j);
+        b = i;
+    }
+}
+
+class SupSubRef {
+    public static void main(String[] args) {
+        X x = new X(10);
+        X x2;
+        Y y = new Y(5, 6);
+
+        x2 = x; // OK, both the same type
+        System.out.println("x2.a: " + x2.a);
+        x2 = y;// Still OK because Y is derived from X;
+        System.out.println("x2.a " + x2.a);
+        // X references know only about X members
+        x2.a = 19; // OK
+        // x2.b = 27 //Error, X doesn't have a b member
+    }
+}
+```
+
+Output:\
+x2.a: 10\
+x2.a 6
+
+Here, Y is now derived from X;thus, it is permissible for x2 to be assigned a reference to a Y object. It is important to understand that it is the type of the reference variable, not the type of the object that refers to , that determines what members can be accessed.
+
+An important place where subclass references are assigned to superclass variables is when **constructors are called in a class hierarchy**
+
+```Java
+import javax.swing.plaf.basic.BasicTreeUI.TreeIncrementAction;
+
+class TwoDShape {
+    private double width;
+    private double height;
+
+    // A default constructor
+    TwoDShape() {
+        width = height = 0.0;
+    }
+
+    // Parameterized constructor
+    TwoDShape(double w, double h) {
+        width = w;
+        height = h;
+    }
+
+    // Construct an object with equal width and height
+    TwoDShape(double x) {
+        width = height = x;
+    }
+
+    // Construct an object from an object.
+    TwoDShape(TwoDShape ob) {
+        width = ob.width;
+        height = ob.height;
+    }
+
+    // Accessor methods for width and height
+    double getWidth() {
+        return width;
+    }
+
+    double getHeight() {
+        return height;
+    }
+
+    void setWidth(double w) {
+        width = w;
+    }
+
+    void setHeight(double h) {
+        height = h;
+    }
+
+    void showDim() {
+        System.out.println("Width and height are " + width + " and " + height);
+    }
+}
+
+// A subclass of TwoDShape for triangles
+class Triangle extends TwoDShape {
+    private String style;
+
+    // A default contructor
+    Triangle() {
+        super();
+        style = "none";
+    }
+
+    // Constructor for Triangle
+    Triangle(String s, double w, double h) {
+        super(w, h);// Call superclass constructor
+        style = s;
+    }
+
+    // One argument constructor
+    Triangle(double x) {
+        super(x);// call superclass constructor
+        style = "filled";
+    }
+
+    // COnstruct an object from an object
+    Triangle(Triangle ob) {
+        super(ob); // Pass object to TwoDShape constructor
+        style = ob.style;
+    }
+
+    double area() {
+        return getWidth() * getHeight() / 2;
+    }
+
+    void showStyle() {
+        System.out.println("Triangle is " + style);
+    }
+}
+
+class Shapes7 {
+    public static void main(String[] args) {
+        Triangle t1 = new Triangle("outlined", 8.0, 12.0);
+        // make a copy of t1
+        Triangle t2 = new Triangle(t1);
+
+        System.out.println("Info fot t1: ");
+        t1.showStyle();
+        t1.showDim();
+        System.out.println("Area is " + t1.area());
+        System.out.println();
+
+        System.out.println("Info fot t2: ");
+        t2.showStyle();
+        t2.showDim();
+        System.out.println("Area is " + t2.area());
+        System.out.println();
+
+    }
+}
+```
+
+Output:\
+Info fot t1: \
+Triangle is outlined\
+Width and height are 8.0 and 12.0\
+Area is 48.0
+
+Info fot t2: \
+Triangle is outlined\
+Width and height are 8.0 and 12.0\
+Area is 48.0
+
+The key point is that TwoDshape( ) is expecting a TwoDShape object. However, Triangle( ) passes it a Triangle object. The reason this works is because, as explained, a superclass reference can refer to a subclass object. Thus, it is perfectly acceptable to pass TwoDShape( ) a reference to an object of a class derived from TwoDShape. Because the TwoDShape( ) constructor is initializing only those portions of the subclass object that are members of TwoDShape, it doesn’t matter that the object might also contain other members added by derived classes.
