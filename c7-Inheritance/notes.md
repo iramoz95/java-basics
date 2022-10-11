@@ -511,3 +511,43 @@ class Shapes6 {
     }
 }
 ```
+
+## When Are CONstructors Executed?
+
+In a class hierarchy, constructors complete their execution in order of derivation, **from superclass to subclass**. If super( ) is not used, then the default (parameterless) constructor of each superclass will be executed.
+
+```Java
+//Demonstrate when constructors are executed
+//Create a super class
+class A {
+    A() {
+        System.out.println("Constructing A.");
+    }
+}
+
+// Create a subclass by extending class A
+class B extends A {
+    B() {
+        System.out.println("Constructing B.");
+    }
+}
+
+// Create another subclass by extending B
+class C extends B {
+    C() {
+        System.out.println("Constructing C.");
+    }
+}
+
+class OrderOfConstruction {
+    public static void main(String[] args) {
+        C c = new C();
+    }
+
+}
+```
+
+Output:\
+Constructing A.\
+Constructing B.\
+Constructing C.
