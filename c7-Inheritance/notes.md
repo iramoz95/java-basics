@@ -1274,3 +1274,86 @@ object is triangle\
 Are is 24.5
 
 **It is perfectly acceptable for an abstract class to contain concrete methods which a subclass is free to use as is. Only those methods declared as abstract need be overridden by subclasses.**
+
+## Using final
+
+Sometimes you will want to prevent overriding and inheritance.Whatever the reason, in Java it is easy to **prevent a method from being overridden or a class from being inherited by using the keyword final**
+
+### **final Prevents Overriding**
+
+To prevent a method from being overridden, specify final as a modifier at the start of its declaration. Methods declared as final cannot be overridden. The following fragment illustrates final:
+
+```Java
+class A {
+    final void meth() {
+        System.out.println("This is a final method.");
+    }
+}
+
+class B extends A {
+    void meth() { // ERROR! Can't override.
+        System.out.println("Illegal!");
+    }
+}
+```
+
+Because **meth( ) is declared as final, it cannot be overridden in B**. If you attempt to do so, a compile-time error will result.
+
+### **final prevents Inheritance**
+
+You can **prevent a class** from being **inherited** by preceding its declaration with **final**. Declaring a class as final **implicitly declares all of its methods as final**, too. As you might expect, it **is illegal to declare a class as both abstract and final**since an abstract class is incomplete by itself and relies upon its subclasses to provide complete implementations
+
+```Java
+final class A {
+    // ...
+}
+
+// The following class is illegal.
+class B extends A { // ERROR! Can't subclass A
+    // ...
+}
+```
+
+## Using final with Data Members
+
+Final can also be applied to member **variables** to create **constants**. If you precede an instance variable’s name with final, its value cannot be changed throughout the lifetime of your program.
+
+```Java
+//Return a String object
+class ErrorMsg {
+    // Error codes
+    final int OUTERR = 0;
+    final int INERR = 1;
+    final int DISKERR = 2;
+    final int INDEXERR = 3;
+
+    String[] msgs = {
+            "Output Error",
+            "Input Error",
+            "Dusk Full",
+            "Index Out-Of-Bounds"
+    };
+
+    // Return the error message
+    String getErrorMsg(int i) {
+        if (i >= 0 && i < msgs.length)
+            return msgs[i];
+        else
+            return "Invalid Error Code";
+    }
+}
+
+class FinalD {
+    public static void main(String[] args) {
+        ErrorMsg err = new ErrorMsg();
+        System.out.println(err.getErrorMsg(err.OUTERR));
+        System.out.println(err.getErrorMsg(err.DISKERR));
+    }
+}
+```
+
+Output:\
+Output Error\
+Dusk Full
+
+Notice how the final constants are used in main( ). Since they are **members of the ErrorMsg class**, they **must be accessed via an object of that class**. Of course, they can also be inherited by subclasses and accessed directly inside those subclasses.
