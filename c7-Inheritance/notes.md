@@ -630,7 +630,7 @@ Output:\
 x2.a: 10\
 x2.a 6
 
-Here, Y is now derived from X;thus, it is permissible for x2 to be assigned a reference to a Y object. It is important to understand that it is the type of the reference variable, not the type of the object that refers to , that determines what members can be accessed.
+Here, **Y is now derived from X;thus, it is permissible for x2 to be assigned a reference to a Y object**. It is important to understand that it is the type of the reference variable, not the type of the object that refers to , that determines what members can be accessed.
 
 An important place where subclass references are assigned to superclass variables is when **constructors are called in a class hierarchy**
 
@@ -846,3 +846,63 @@ class Overload {
 ```
 
 The version of show( ) in B takes a string parameter. This makes its signature different from the one in A, which takes no parameters. Therefore, no overriding (or name hiding) takes place.
+
+## Overridden Methods Support Polymorphism
+
+Method overriding forms the basis for one of Java’s most powerful concepts: **dynamic method dispatch**. Dynamic method dispatch is the **mechanism by which a call to an overridden method is resolved at run time rather than compile time,** this is how Java implements run-time polymorphism.
+
+A superclass reference variable can refer to a subclass object. **When an overridden method is called through a superclass reference**, Java determines which version of that method to **execute based upon the type of the object being referred to at the time the call occurs**.
+
+It is the **type of the object being referred to** (not the type of the reference variable) **that determines which version of an overridden method will be executed**. Therefore, if a superclass contains a method that is overridden by a subclass, then when different types of objects are referred to through a superclass reference variable, different versions of the method are executed.
+
+```Java
+//Demonstrate dynamic method dispatch
+class Sup {
+    void who() {
+        System.out.println("who() in Sup");
+    }
+}
+
+class Sub1 extends Sup {
+    void who() {
+        System.out.println("who() in Sub1");
+    }
+}
+
+class Sub2 extends Sup {
+    void who() {
+        System.out.println("who() in Sub2");
+    }
+}
+
+class DynDispDemo {
+    public static void main(String[] args) {
+        Sup superOb = new Sup();
+        Sub1 subOb1 = new Sub1();
+        Sub2 subOb2 = new Sub2();
+
+        Sup supRef;
+
+        /*
+         * In each case, the version of who() to call
+         * is determined at run time by the type of
+         * object being referred to
+         */
+        supRef = superOb;
+        supRef.who();
+
+        supRef = subOb1;
+        supRef.who();
+
+        supRef = subOb2;
+        supRef.who();
+    }
+}
+```
+
+Output:\
+who() in Sup\
+who() in Sub1\
+who() in Sub2
+
+**The version of who( ) executed is determined by the type of object being referred to at the time of the call, not by the class type of supRef.**
