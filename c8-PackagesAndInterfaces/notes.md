@@ -366,3 +366,30 @@ class SeriesDemo {
 ```
 
 One more point: **If a class includes an interface but does not fully implement the methods defined by that interface, then that class must be declared abstract.** No objects of such a class can be created, but it can be used as an abstract superclass, allowing subclasses to provide the complete implementation.
+
+## Using Interface References
+
+You can create an **interface reference variable**. Such a variable **can refer to any object that implements its interface**. When you call a method on an object through an interface reference, it is the version of the method implemented by the object that is executed. **This process is similar to using a superclass reference to access a subclass object**
+
+The following example illustrates this process
+
+```Java
+package seriespack;
+
+class SeriesDemo2 {
+    public static void main(String[] args) {
+        ByTwos twoOb = new ByTwos();
+        ByThrees threeOb = new ByThrees();
+        Series ob;
+
+        for (int i = 0; i < 5; i++) {
+            ob = twoOb;
+            System.out.println("Next ByTwos value is " + ob.getNext());
+            ob = threeOb;
+            System.out.println("Next ByThrees value is " + ob.getNext());
+        }
+    }
+}
+```
+
+**ob** is declared to be a **reference to a Series interface**. This means that it can be used to **store references to any object that implements Series**. In this case, it is used to refer to twoOb and threeOb, which are objects of type ByTwos and ByThrees, respectively, which both implement Series. An interface reference variable has **knowledge only of the methods declared by its interface declaration**. Thus, ob could not be used to access any other variables or methods that might be supported by the object.
