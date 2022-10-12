@@ -220,3 +220,149 @@ class UseBook {
     }
 }
 ```
+
+## Interfaces
+
+In object-oriented programming, it is sometimes helpful to **define what a class must do but not how it will do it**. You have already seen an **example** of this: the **abstract method**. An abstract method defines the signature for a method but provides no implementation, thus an abstract method **specifies the interface to the method but not the implementation**.
+
+In Java, you can fully **separate a class’ interface** from its implementation by using the keyword **interface**.. Thus, an **interface specifies what must be done**, but not how to do it. Once an interface is defined,**any number of classes can implement it**. Also, **one class can implement any number of interfaces**.
+
+By providing the **interface keyword**, Java allows you to fully utilize the **“one interface, multiple methods” aspect of polymorphism.**
+
+Here is a simplified general form of a traditional interface:
+
+```Text
+access interface name {
+    ret-type method-name1(param-list);
+    ret-type method-name2(param-list);
+    type var1 = value;
+    type var2 = value;
+    // ...
+    ret-type method-nameN(param-list);
+    type varN = value;
+}
+```
+
+When **no access modifier is included**, then default access results, and the **interface is available only to other members of its package**. When it is declared as **public**, the interface can be used by **any other code**. **(When an interface is declared public, it must be in a file of the same name.)** name is the name of the interface and can be any valid identifier.
+
+**Variables declared in an interface** are not instance variables. Instead, they are **implicitly public, final, and static and must be initialized. Thus, they are essentially constants.**
+
+## Implementing Interfaces
+
+Example
+
+```Java
+public interface Series {
+    int getNext(); // return next number in series
+
+    void reset(); // restart
+
+    void setStart(int x); // set starting value
+}
+```
+
+It is both permissible and common for classes that implement interfaces to define additional members of their own, for example getPrevious();
+
+```Java
+package seriespack;
+
+// Implement Series
+class ByTwos implements Series {
+    int start;
+    int val;
+    int prev;
+
+    ByTwos() {
+        start = 0;
+        val = 0;
+        prev = -2;
+    }
+
+    public int getNext() {
+        prev = val;
+        val += 2;
+        return val;
+    }
+
+    public void reset() {
+        val = start;
+        prev = start - 2;
+    }
+
+    public void setStart(int x) {
+        start = x;
+        val = x;
+        prev = x - 2;
+    }
+
+    // Add a method not defined by Series
+    int getPrevious() {
+        return prev;
+    }
+}
+```
+
+As explained, any number of classes can implement an interface. For example, here both classes ByTwos and ByThrees use the same Series interface.
+
+```Java
+package seriespack;
+
+// Implement Series
+class ByThrees implements Series {
+    int start;
+    int val;
+
+    ByThrees() {
+        start = 0;
+        val = 0;
+    }
+
+    public int getNext() {
+        val += 3;
+        return val;
+    }
+
+    public void reset() {
+        val = start;
+    }
+
+    public void setStart(int x) {
+        start = x;
+        val = x;
+    }
+}
+
+```
+
+Final, the main class execute the following using both classes
+
+```Java
+package seriespack;
+
+class SeriesDemo {
+    public static void main(String[] args) {
+        ByTwos ob = new ByTwos();
+        ByThrees obt = new ByThrees();
+
+        for (int i = 0; i < 5; i++)
+            System.out.println("Prevoius : " + ob.getPrevious() + "\tCurrent: " + 2 * i + "\tNext: " + ob.getNext());
+
+        System.out.println("\nReseting");
+        ob.reset();
+        for (int i = 0; i < 5; i++)
+            System.out.println("Prevoius : " + ob.getPrevious() + "\tCurrent: " + 2 * i + "\tNext: " + ob.getNext());
+
+        System.out.println("\nStarting at 100");
+        ob.setStart(100);
+        for (int i = 0; i < 5; i++)
+            System.out.println(
+                    "Prevoius : " + ob.getPrevious() + "\tCurrent: " + (2 * i + 100) + "\tNext: " + ob.getNext());
+
+        System.out.println("\nBy Threes from 0 to 30");
+        for (int i = 0; i <= 10; i++)
+            System.out.println("Current: " + 3 * i + "\tNext: " + obt.getNext());
+    }
+}
+```
+
+One more point: **If a class includes an interface but does not fully implement the methods defined by that interface, then that class must be declared abstract.** No objects of such a class can be created, but it can be used as an abstract superclass, allowing subclasses to provide the complete implementation.
