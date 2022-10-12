@@ -2,9 +2,10 @@
 package bookpack;
 
 public class Book {
-    private String title;
-    private String author;
-    private int pubDate;
+    // these are now protected
+    protected String title;
+    protected String author;
+    protected int pubDate;
 
     public Book(String t, String a, int d) {
         title = t;

@@ -40,3 +40,148 @@ If a class has default access, it can be accessed only by other code within its 
 |**Visible within<br>same package<br> by non-subclass**| No | Yes | Yes | Yes |
 |**Visible within<br>different package<br>by subclass**| No | No | Yes | Yes |
 |**Visible within<br>differnet package<br>by non-subclass**| No | No | No | Yes |
+
+## Understanding Protected Members
+
+The **protected** modifier creates a member that is accessible within its package and to subclasses in other packages. Thus, a protected member is available for all subclasses to use but is still **protected** from arbitrary access by code outside its package.
+
+```Java
+// A short package demonstration
+package bookpack;
+
+public class Book {
+    // these are now protected
+    protected String title;
+    protected String author;
+    protected int pubDate;
+
+    public Book(String t, String a, int d) {
+        title = t;
+        author = a;
+        pubDate = d;
+    }
+
+    public void show() {
+        System.out.println(title);
+        System.out.println(author);
+        System.out.println(pubDate);
+        System.out.println();
+    }
+}
+```
+
+```Java
+//Demonstrate protected
+package bookpackext;
+
+class ExtBook extends bookpack.Book {
+    private String publisher;
+
+    public ExtBook(String t, String a, int d, String p) {
+        super(t, a, d);
+        publisher = p;
+    }
+
+    public void show() {
+        super.show();
+        System.out.println(publisher);
+        System.out.println();
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String p) {
+        publisher = p;
+    }
+
+    /*
+     * These are OK because subclass can access a
+     * protected member
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String t) {
+        title = t;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String a) {
+        author = a;
+    }
+
+    public int getPubDate() {
+        return pubDate;
+    }
+
+    public void setPubDate(int d) {
+        pubDate = d;
+    }
+}
+
+class ProtectDemo {
+    public static void main(String[] args) {
+        ExtBook[] books = new ExtBook[5];
+        books[0] = new ExtBook("Java: A Beginner's Guide", "Schildt", 2022, "McGraw Hill");
+        books[1] = new ExtBook("Java: The Complete Reference", "Schildt", 2022, "McGraw Hill");
+        books[2] = new ExtBook("1984", "Orwell", 1949, "Harcourt Brace Jovanovich");
+        books[3] = new ExtBook("Red Storm Rising", "Clancy", 1986, "Putnam");
+        books[4] = new ExtBook("On the Road", "Kerouac", 1955, "Viking");
+        for (ExtBook ext : books)
+            ext.show();
+
+        // Find books by author
+        System.out.println("Showing all books by Schildt");
+        // books[0].title= "Test title"; //Error - not accessible
+        books[0].setTitle("Java: A Beginner's Guide - Modified");
+
+        for (ExtBook ext : books)
+            if (ext.getAuthor() == "Schildt")
+                System.out.println(ext.getTitle());
+
+    }
+}
+```
+
+Output:\
+Java: A Beginner's Guide\
+Schildt\
+2022
+
+McGraw Hill
+
+Java: The Complete Reference\
+Schildt\
+2022
+
+McGraw Hill
+
+1984\
+Orwell\
+1949
+
+Harcourt Brace Jovanovich
+
+Red Storm Rising\
+Clancy\
+1986
+
+Putnam
+
+On the Road\
+Kerouac\
+1955
+
+Viking
+
+Showing all books by Schildt\
+Java: A Beginner's Guide - Modified\
+Java: The Complete Reference
+
+Look first at the code inside **ExtBook**. Because **ExtBook** extends **Book**, it has access to the **protected** members of **Book**, even though **ExtBook** is in a different package. Thus, it can access **title**, **author**, and **pubDate** directly, as it does in the accessor methods it creates for those variables. However, in **ProtectDemo**, access to these variables is denied because **ProtectDemo** is not a subclass of **Book**.
