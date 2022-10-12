@@ -185,3 +185,38 @@ Java: A Beginner's Guide - Modified\
 Java: The Complete Reference
 
 Look first at the code inside **ExtBook**. Because **ExtBook** extends **Book**, it has access to the **protected** members of **Book**, even though **ExtBook** is in a different package. Thus, it can access **title**, **author**, and **pubDate** directly, as it does in the accessor methods it creates for those variables. However, in **ProtectDemo**, access to these variables is denied because **ProtectDemo** is not a subclass of **Book**.
+
+## Importing Packages
+
+Using **import** you can bring one or more members of a package into view. This allows you to use those members directly, without explicit package qualification.
+
+**_import package.classname;_**
+
+If you want to import the entire contents of a package, **use an asterisk (\*)** for the class name. Here are examples of both forms:
+
+i**mport mypack.MyClass\
+import mypack.\*;**
+
+Example
+
+```Java
+//Demonstrate import
+package bookpackext;
+
+import bookpack.*;
+
+//Use the Book vlass from bookpack
+class UseBook {
+    public static void main(String[] args) {
+        //Now, you can refer to Book directly, without qualification
+        Book[] books = new Book[5];
+        books[0] = new Book("Java: A Beginner's Guide", "Schildt", 2022);
+        books[1] = new Book("Java: The Complete Reference", "Schildt", 2022);
+        books[2] = new Book("1984", "Orwell", 1949);
+        books[3] = new Book("Red Storm Rising", "Clancy", 1986);
+        books[4] = new Book("On the Road", "Kerouac", 1955);
+        for (Book b : books)
+            b.show();
+    }
+}
+```
