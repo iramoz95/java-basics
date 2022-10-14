@@ -66,3 +66,36 @@ Output:\
 Before exception is generated.\
 Index out-of-bounds!\
 After catch statement.
+
+## The Consequences of an Uncaught Exception
+
+If your **program does not catch an exception**, then it will be caught by the JVM. The trouble is that the **JVM’s default exception handler terminates execution** and displays a stack trace and error message.
+
+The **type** of the **exception** must **match** the type specified in a **catch statement**. If it doesn’t, the exception won’t be caught.
+
+```Java
+// This won't work
+class ExcTypeMismatch {
+    public static void main(String[] args) {
+        int[] nums = new int[4];
+        try {
+            System.out.println("Before exception is generated");
+            // generate an index out of bounds exception
+            nums[7] = 10;
+            System.out.println("This won't be displayed");
+        } /*
+           * Can't catch an array boundary error with an
+           * ArithmeticException
+           */
+        catch (ArithmeticException exc) {
+            // catch the exception
+            System.out.println("Index out of bounds!");
+        }
+    }
+}
+```
+
+Output:\
+Before exception is generated\
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException:Index 7 out of bounds for length 4\
+at ExcTypeMismatch.main(ExcTypeMismatch.java:8)
