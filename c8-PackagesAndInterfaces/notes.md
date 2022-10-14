@@ -454,3 +454,88 @@ class IFExtend {
 The release of JDK 8 changed this by adding a new capability to interface called the **default method**. A default method **lets you define a default implementation for an interface method**. In other words, by use of a default method, **it is possible for an interface method to provide a body, rather than being abstract**. During its development, the default method was also referred to as an **extension method**, and you will likely see **both terms used**.
 
 The addition of default methods does not change a key aspect of interface: **an interface still cannot have instance variables**. Thus, the defining difference between an interface and a class is that a c**lass can maintain state information, but an interface cannot**.
+
+## Default Method Fundamentals
+
+An interface default method is defined similar to the way a method is defined by a class. The primary difference is that the declaration is preceded by the keyword default. For example, consider this simple interface.
+
+```Java
+package defaultinpack;
+
+public interface MyIF {
+    // This is a "normal" interface method declaration
+    // It does NOT define a default implementation
+    int getUserID();
+
+    // This is a default method. Notice that it provides
+    // a default implementation
+    default int getAdminID() {
+        return 1;
+    }
+}
+```
+
+Because getAdminID( ) includes a **default** implementation, it is not necessary for an implementing class to override it. In other words, **if an implementing class does not provide its own implementation, the default is used**. For example, the MyIFImp class shown next is perfectly valid:
+
+```Java
+package defaultinpack;
+
+//Implement MyIf
+class MyIFImp implements MyIF {
+   // Only getUserID() defined by MyIF needs to be implementd
+   // getAdminID() can be allowed to default
+   public int getUserID() {
+       return 100;
+   }
+}
+```
+
+```Java
+package defaultinpack;
+
+class MyIFImp2 implements MyIF {
+    // Here, implements for both getUserId()
+    // and getAdminId() are provided
+    public int getUserID() {
+        return 100;
+    }
+
+    public int getAdminID() {
+        return 42;
+    }
+}
+```
+
+Both are valid as shown
+
+```Java
+package defaultinpack;
+
+//Use the default method
+class DefaultMethodDemo {
+    public static void main(String[] args) {
+        MyIFImp obj = new MyIFImp();
+        MyIFImp2 obj2 = new MyIFImp2();
+        // Can call getUserID(), because it is explicitly
+        // implemented by MyIFImp
+        System.out.println("User ID is " + obj.getUserID());
+
+        // Can also call getAdminID() because of default implementation
+        System.out.println("Administrator ID is " + obj.getAdminID());
+
+        // Can also be overridden 0for a class method
+        System.out.println("Administrator ID overridden is " + obj2.getAdminID());
+    }
+}
+```
+
+Outpout:\
+User ID is 100\
+Administrator ID is 1\
+Administrator ID overridden is 42
+
+The default method provides two major benefits
+
+- It gives you a way to gracefully **evolve interfaces** over time **without breaking existing code**.
+
+- It provides **optional functionality** without requiring that a class provide a placeholder implementation when that functionality is not needed.
