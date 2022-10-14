@@ -448,3 +448,9 @@ class IFExtend {
     }
 }
 ```
+
+## Default Interface Methods
+
+The release of JDK 8 changed this by adding a new capability to interface called the **default method**. A default method **lets you define a default implementation for an interface method**. In other words, by use of a default method, **it is possible for an interface method to provide a body, rather than being abstract**. During its development, the default method was also referred to as an **extension method**, and you will likely see **both terms used**.
+
+The addition of default methods does not change a key aspect of interface: **an interface still cannot have instance variables**. Thus, the defining difference between an interface and a class is that a c**lass can maintain state information, but an interface cannot**.
