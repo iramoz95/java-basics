@@ -599,3 +599,92 @@ Administrator ID overridden is 42\
 Interface static method call : 0
 
 **One last point: static interface methods are not inherited by either an implementing class or a subinterface.**
+
+## Private Interface Method
+
+Beginning with JDK 9, an **interface can include a private method**. A private interface method can be **called** only by a **default method or another private method defined by the same interface**.
+
+It **cannot be used by code outside the interface** in which it is defined. This restriction **includes subinterfaces** because a **private interface method is not inherited by a subinterface**.
+
+The **key benefit** of a private interface method is that it lets two or more default methods **use a common piece of code**, thus **avoiding code duplication**
+
+```Java
+package seriespack;
+
+public interface Series {
+    int getNext(); // return next number in series
+
+    // Return an array that contains the next n elements
+    // in the series beyond the current element
+    default int[] getNextArray(int n) {
+        int[] vals = new int[n];
+        for (int i = 0; i < n; i++)
+            vals[i] = getNext();
+        return vals;
+    }
+
+    // Return an array that contains the next n elements
+    // in the series, after skipping elements.
+    default int[] skipAndGetNextArray(int skip, int n) {
+        // Skip the specified number of elements.
+        getArray(skip);
+        return getArray(n);
+    }
+
+    // A private method that returns an array containing
+    // the next n elements.
+    private int[] getArray(int n) {
+        int[] vals = new int[n];
+        for (int i = 0; i < n; i++)
+            vals[i] = getNext();
+        return vals;
+    }
+
+    void reset(); // restart
+
+    void setStart(int x); // set starting value
+}
+```
+
+```Java
+package seriespack;
+
+class SeriesDemo2 {
+    public static void main(String[] args) {
+        ByTwos twoOb = new ByTwos();
+        ByThrees threeOb = new ByThrees();
+        Series ob;
+
+        for (int i = 0; i < 5; i++) {
+            ob = twoOb;
+            System.out.println("Next ByTwos value is " + ob.getNext());
+            ob = threeOb;
+            System.out.println("Next ByThrees value is " + ob.getNext());
+        }
+        // Using default interface method
+        ob = threeOb;
+        int[] result = ob.getNextArray(10);
+        System.out.println("\nThe next " + result.length + " values are:");
+        for (int r : result)
+            System.out.println("getNextArray(10) default interface method " + r);
+
+        // Using default interface method and private interface method
+        ob.reset();
+        System.out.println("\nReseting to 0...");
+        result = ob.skipAndGetNextArray(5, 5);
+        System.out.println("The next " + result.length + " values skipping 5 positions are");
+        for (int r : result)
+            System.out.println("skipAndGetNextArray(5,5) default private interface method " + r);
+
+    }
+}
+```
+
+Output:\
+Reseting to 0...\
+The next 5 values skipping 5 positions are\
+skipAndGetNextArray(5,5) default private interface method 18\
+skipAndGetNextArray(5,5) default private interface method 21\
+skipAndGetNextArray(5,5) default private interface method 24\
+skipAndGetNextArray(5,5) default private interface method 27\
+skipAndGetNextArray(5,5) default private interface method 30

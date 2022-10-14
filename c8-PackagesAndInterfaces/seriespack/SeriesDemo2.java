@@ -15,8 +15,17 @@ class SeriesDemo2 {
         // Using default interface method
         ob = threeOb;
         int[] result = ob.getNextArray(10);
-        System.out.println("The next " + result.length + " values are:");
+        System.out.println("\nThe next " + result.length + " values are:");
         for (int r : result)
             System.out.println("getNextArray(10) default interface method " + r);
+
+        // Using default interface method and private interface method
+        ob.reset();
+        System.out.println("\nReseting to 0...");
+        result = ob.skipAndGetNextArray(5, 5);
+        System.out.println("The next " + result.length + " values skipping 5 positions are");
+        for (int r : result)
+            System.out.println("skipAndGetNextArray(5,5) default private interface method " + r);
+
     }
 }
