@@ -393,3 +393,58 @@ class SeriesDemo2 {
 ```
 
 **ob** is declared to be a **reference to a Series interface**. This means that it can be used to **store references to any object that implements Series**. In this case, it is used to refer to twoOb and threeOb, which are objects of type ByTwos and ByThrees, respectively, which both implement Series. An interface reference variable has **knowledge only of the methods declared by its interface declaration**. Thus, ob could not be used to access any other variables or methods that might be supported by the object.
+
+## Interfaces Can Be Extended
+
+One interface can inherit another by use of the keyword extends. The **syntax is the same as for inheriting classes**. When a class implements an interface that inherits another interface, **it must provide implementations for all methods required by the interface inheritance chain**. Following is an example:
+
+```Java
+package iextended;
+
+interface A {
+    void meth1();
+
+    void meth2();
+}
+```
+
+```Java
+package iextended;
+
+//B now includes meth1() and meth()2 - it adds meth3()
+interface B extends A {
+    void meth3();
+}
+```
+
+```Java
+package iextended;
+
+//This calss must implement all of A and B
+class MyClass implements B {
+    public void meth1() {
+        System.out.println("Implement meth1().");
+    }
+
+    public void meth2() {
+        System.out.println("Implement meth2().");
+    }
+
+    public void meth3() {
+        System.out.println("Implement meth3().");
+    }
+}
+```
+
+```Java
+package iextended;
+
+class IFExtend {
+    public static void main(String[] args) {
+        MyClass ob = new MyClass();
+        ob.meth1();
+        ob.meth2();
+        ob.meth3();
+    }
+}
+```
