@@ -539,3 +539,63 @@ The default method provides two major benefits
 - It gives you a way to gracefully **evolve interfaces** over time **without breaking existing code**.
 
 - It provides **optional functionality** without requiring that a class provide a placeholder implementation when that functionality is not needed.
+
+## Use static Methods in an Interface
+
+JDK 8 added another new capability to interface: the ability to **define one or more static methods**. Like static methods in a class, a static method defined by an interface **can be called independently of any object**. Thus, no implementation of the interface is necessary, and no instance of the interface is required in order to call a static method.Instead, a static method is **called by specifying the interface name, followed by a period, followed by the method name.**
+Here is the general form:
+
+**_InterfaceName.staticMethodName_**
+
+```Java
+package defaultinpack;
+
+public interface MyIF {
+    // This is a "normal" interface method declaration
+    // It does NOT define a default implementation
+    int getUserID();
+
+    // This is a default method. Notice that it provides
+    // a default implementation
+    default int getAdminID() {
+        return 1;
+    }
+
+    // This is a static interface method
+    static int getUniversalID() {
+        return 0;
+    }
+}
+```
+
+```Java
+package defaultinpack;
+
+//Use the default method
+class DefaultMethodDemo {
+    public static void main(String[] args) {
+        MyIFImp obj = new MyIFImp();
+        MyIFImp2 obj2 = new MyIFImp2();
+        // Can call getUserID(), because it is explicitly
+        // implemented by MyIFImp
+        System.out.println("User ID is " + obj.getUserID());
+
+        // Can also call getAdminID() because of default implementation
+        System.out.println("Administrator ID is " + obj.getAdminID());
+
+        // Can also be overridden 0for a class method
+        System.out.println("Administrator ID overridden is " + obj2.getAdminID());
+
+        // Calling interface static method
+        System.out.println("Interface static method call : " + MyIF.getUniversalID());
+    }
+}
+```
+
+Output:\
+User ID is 100\
+Administrator ID is 1\
+Administrator ID overridden is 42\
+Interface static method call : 0
+
+**One last point: static interface methods are not inherited by either an implementing class or a subinterface.**

@@ -14,5 +14,8 @@ class DefaultMethodDemo {
 
         // Can also be overridden 0for a class method
         System.out.println("Administrator ID overridden is " + obj2.getAdminID());
+
+        // Calling interface static method
+        System.out.println("Interface static method call : " + MyIF.getUniversalID());
     }
 }

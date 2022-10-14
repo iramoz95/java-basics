@@ -10,4 +10,9 @@ public interface MyIF {
     default int getAdminID() {
         return 1;
     }
+
+    // This is a static interface method
+    static int getUniversalID() {
+        return 0;
+    }
 }
