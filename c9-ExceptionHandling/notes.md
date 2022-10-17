@@ -224,3 +224,31 @@ In this example, an exception that can be handled by the inner try—in this cas
 
 Often nested try blocks are used to allow different categories of errors to be handled in different ways. Some types of errors are catastrophic and cannot be fixed. Some are minor and can be handled immediately. You might use an outer try block to catch the most severe errors, allowing inner try blocks to handle less
 serious ones.
+
+## Throwing an Exception
+
+It is possible to manually throw an exception by using the **throw statement**. Its general form is shown here:
+
+**_ throw exceptOb;_**
+
+Here, exceptOb must be an object of an exception class derived from **Throwable**. Here is an example that illustrates the **throw** statement by manually throwing an **ArithmeticException**:
+
+```Java
+//Manually thow an exception
+class ThrowDemo {
+    public static void main(String[] args) {
+        try {
+            System.out.println("Before throw.");
+            throw new ArithmeticException();// Throw an exception
+        } catch (ArithmeticException exc) {
+            System.out.println("Exception caught.");
+        }
+        System.out.println("After try/catch block");
+    }
+}
+```
+
+Output:\
+Before throw.\
+Exception caught.\
+After try/catch block
