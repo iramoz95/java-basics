@@ -99,3 +99,40 @@ Output:\
 Before exception is generated\
 Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException:Index 7 out of bounds for length 4\
 at ExcTypeMismatch.main(ExcTypeMismatch.java:8)
+
+## Using Multiple catch Statements
+
+You can associate **more than one catch** statement with a try. In fact, it is common to do so. However, **each catch must catch a different type of exception**. For example, the program shown here catches both array boundary and divide-by-zero errors:
+
+```Java
+// Use multiple catch statements
+class ExcDemo4 {
+    public static void main(String[] args) {
+        // Here, numer is longer than denom
+        int[] numer = { 4, 8, 16, 32, 64, 128, 256, 512 };
+        int[] denom = { 2, 0, 4, 4, 0, 8 };
+
+        for (int i = 0; i < numer.length; i++) {
+            try {
+                System.out.println(numer[i] + " / " +
+                        denom[i] + " is " +
+                        numer[i] / denom[i]);
+            } catch (ArithmeticException exc) {
+                System.out.println("Can't divide by Zero");
+            } catch (ArrayIndexOutOfBoundsException exc) {
+                System.out.println("No matching element found");
+            }
+        }
+    }
+}
+```
+
+Output:\
+4 / 2 is 2\
+Can't divide by Zero\
+16 / 4 is 4\
+32 / 4 is 8\
+Can't divide by Zero\
+128 / 8 is 16\
+No matching element found\
+No matching element found
