@@ -136,3 +136,43 @@ Can't divide by Zero\
 128 / 8 is 16\
 No matching element found\
 No matching element found
+
+## Catching Subclass Exceptions
+
+A **catch** clause for a superclass will also match any of its subclasses. For example, since the superclass of all exceptions is **Throwable**, to catch all possible exceptions, catch **Throwable**. If you want to catch exceptions of both a superclass type and a subclass type, put the **subclass first in the catch sequence**. For example, consider the following program:
+
+```java
+// Subclasses must precede superclasses in catch statements.
+class ExcDemo5 {
+    public static void main(String[] args) {
+        // Here, numer is longer than denom.
+        int[] numer = { 4, 8, 16, 32, 64, 128, 256, 512 };
+        int[] denom = { 2, 0, 4, 4, 0, 8 };
+
+        for (int i = 0; i < numer.length; i++) {
+            try {
+                System.out.println(numer[i] + " / " +
+                        denom[i] + " is " +
+                        numer[i] / denom[i]);
+            } catch (ArrayIndexOutOfBoundsException exc) {
+                // catch the exception
+                System.out.println("No matching element found");
+            } catch (Throwable exc) {
+                System.out.println("Some exception occurred.");
+            }
+        }
+    }
+}
+```
+
+Output:\
+4 / 2 is 2\
+Some exception occurred.\
+16 / 4 is 4\
+32 / 4 is 8\
+Some exception occurred.\
+128 / 8 is 16\
+No matching element found\
+No matching element found
+
+In this case, **catch(Throwable) catches all exceptions except for ArrayIndexOutOfBounds- Exception**. The issue of catching subclass exceptions becomes more important when you create exceptions of your own.
