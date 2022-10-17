@@ -176,3 +176,51 @@ No matching element found\
 No matching element found
 
 In this case, **catch(Throwable) catches all exceptions except for ArrayIndexOutOfBounds- Exception**. The issue of catching subclass exceptions becomes more important when you create exceptions of your own.
+
+## Try Blocks Can Be Nested
+
+One **try** block can be nested within another. An exception generated within the inner **try** block that is not caught by a **catch** associated with that **try** is propagated to the **outer try** block. For example, here the **ArrayIndexOutOfBoundsException** is not caught by the inner **catch**, but by the outer **catch**:
+
+```Java
+//Use a nested try block
+class NestTrys {
+    public static void main(String[] args) {
+        // Here, numer is longer than denom.
+        int[] numer = { 4, 8, 16, 32, 64, 128, 256, 512 };
+        int[] denom = { 2, 0, 4, 4, 0, 8 };
+
+        try {// outer try
+            for (int i = 0; i < numer.length; i++) {
+                try {// nested try
+
+                    System.out.println(numer[i] + " / " +
+                            denom[i] + " is " +
+                            numer[i] / denom[i]);
+                } catch (ArithmeticException exc) {
+                    // catch the exception
+                    System.out.println("Can't divide by Zero!");
+                }
+            }
+        } catch (ArrayIndexOutOfBoundsException exc) {
+            // catch the exception
+            System.out.println("No matching element found.");
+            System.out.println("Fatal error - program terminated.");
+        }
+    }
+}
+```
+
+Output:\
+4 / 2 is 2\
+Can't divide by Zero!\
+16 / 4 is 4\
+32 / 4 is 8\
+Can't divide by Zero!\
+128 / 8 is 16\
+No matching element found.\
+Fatal error - program terminated.
+
+In this example, an exception that can be handled by the inner try—in this case, a divide-by-zero error—allows the program to continue. However, an array boundary error is caught by the outer try, which causes the program to terminate.
+
+Often nested try blocks are used to allow different categories of errors to be handled in different ways. Some types of errors are catastrophic and cannot be fixed. Some are minor and can be handled immediately. You might use an outer try block to catch the most severe errors, allowing inner try blocks to handle less
+serious ones.
