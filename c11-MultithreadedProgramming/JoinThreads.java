@@ -1,8 +1,8 @@
-//Create multiple threads
+//Use join()
 class MyThread implements Runnable {
     Thread thrd;
 
-    // Construct a new thread
+    // Construct a new thread.
     MyThread(String name) {
         thrd = new Thread(this, name);
     }
@@ -20,8 +20,7 @@ class MyThread implements Runnable {
         try {
             for (int count = 0; count < 10; count++) {
                 Thread.sleep(400);
-                System.out.println("In " + thrd.getName() +
-                        ", count is " + count);
+                System.out.println("In " + thrd.getName() + ", count is " + count);
             }
         } catch (InterruptedException exc) {
             System.out.println(thrd.getName() + " interrupted.");
@@ -30,24 +29,22 @@ class MyThread implements Runnable {
     }
 }
 
-// Use isALive().
-class MoreThreads {
+class JoinThreads {
     public static void main(String[] args) {
         System.out.println("Main thread starting.");
-
         MyThread mt1 = MyThread.createAndStart("Child #1");
         MyThread mt2 = MyThread.createAndStart("Child #2");
         MyThread mt3 = MyThread.createAndStart("Child #3");
-
-        do {
-            System.out.print(".");
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException exc) {
-                System.out.println("Main thread interrupted.");
-            }
-        } while (mt1.thrd.isAlive() || mt2.thrd.isAlive() || mt3.thrd.isAlive());
-
+        try {
+            mt1.thrd.join();// Wait until the specified thread ends
+            System.out.println("Child #1 joined");
+            mt2.thrd.join();// Wait until the specified thread ends
+            System.out.println("Child #2 joined");
+            mt3.thrd.join();// Wait until the specified thread ends
+            System.out.println("Child #3 joined");
+        } catch (InterruptedException exc) {
+            System.out.println("Main thread interrupted");
+        }
         System.out.println("Main thread ending.");
     }
 }
