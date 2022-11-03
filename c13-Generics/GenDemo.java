@@ -1,4 +1,5 @@
-import javax.print.DocFlavor.STRING;
+import java.lang.reflect.Array;
+import java.util.List;
 
 // A simple generic class.
 // Here, T is a type parameter that
